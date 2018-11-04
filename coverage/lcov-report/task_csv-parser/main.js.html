@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for task_csv-parser\main.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">task_csv-parser/</a> main.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">38.67% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>29/75</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/33</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/15</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">38.67% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>29/75</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var csv = require("csvtojson");
+var jsonToCsv = require("json-to-csv");
+var mysql = require("mysql");
+var moment = require("moment");
+var phone = require("phone");
+var invalid_types = [];
+exports.invalid_type = invalid_types;
+var valid_types = [];
+exports.valid_type = valid_types;
+var con = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "savikkirill3",
+    database: "new_schema"
+});
+exports.con = con;
+csv()
+    .fromFile('user.csv')
+    .then(<span class="fstat-no" title="function not covered" >function (jsonObj) {</span>
+<span class="cstat-no" title="statement not covered" >    csvParser(jsonObj);</span>
+});
+<span class="fstat-no" title="function not covered" >function sendToCsv(invalid_types) {</span>
+<span class="cstat-no" title="statement not covered" >    jsonToCsv(invalid_types, 'something.csv')</span>
+        .then(<span class="fstat-no" title="function not covered" >function () {</span> })
+        .catch(<span class="fstat-no" title="function not covered" >function (error) {</span> });
+}
+<span class="fstat-no" title="function not covered" >function sendToMysql(valid_types) {</span>
+<span class="cstat-no" title="statement not covered" >    con.query('CREATE TABLE IF NOT EXISTS parsedCsv' +</span>
+        '(cat_id INT  AUTO_INCREMENT PRIMARY KEY, ' +
+        'name VARCHAR(45),surname VARCHAR(45), age INT), mail VARCHAR(45). phone VARCHAR(45), date DATE, time TIME');
+<span class="cstat-no" title="statement not covered" >    valid_types.forEach(<span class="fstat-no" title="function not covered" >function (el) {</span></span>
+<span class="cstat-no" title="statement not covered" >        con.query('INSERT INTO data SET ?', el, <span class="fstat-no" title="function not covered" >function (err, result) {</span></span>
+<span class="cstat-no" title="statement not covered" >            if (err)</span>
+<span class="cstat-no" title="statement not covered" >                throw err;</span>
+<span class="cstat-no" title="statement not covered" >            console.log("Record inserted");</span>
+        });
+    });
+<span class="cstat-no" title="statement not covered" >    con.end();</span>
+}
+<span class="fstat-no" title="function not covered" >function csvParser(results) {</span>
+<span class="cstat-no" title="statement not covered" >    results.forEach(<span class="fstat-no" title="function not covered" >function (el) {</span></span>
+<span class="cstat-no" title="statement not covered" >        el.name = String(el.name);</span>
+<span class="cstat-no" title="statement not covered" >        el.surname = String(el.surname);</span>
+<span class="cstat-no" title="statement not covered" >        el.age = StringToNumber(el.age);</span>
+<span class="cstat-no" title="statement not covered" >        el.mail = ValidMail(el.mail);</span>
+<span class="cstat-no" title="statement not covered" >        el.phone = Phone(el.phone);</span>
+<span class="cstat-no" title="statement not covered" >        el.date = StringToDate(el.date);</span>
+<span class="cstat-no" title="statement not covered" >        el.time = StringToTime(el.time);</span>
+<span class="cstat-no" title="statement not covered" >        if (el.name == "Error" || el.age == "Age error" || el.surname == "Error" || el.date == "Date error" || el.time == "Time error" || el.mail == "Email error" || el.phone == "Phone error") {</span>
+<span class="cstat-no" title="statement not covered" >            invalid_types.push(el);</span>
+        }
+        else {
+<span class="cstat-no" title="statement not covered" >            valid_types.push(el);</span>
+        }
+    });
+<span class="cstat-no" title="statement not covered" >    sendToCsv(invalid_types);</span>
+<span class="cstat-no" title="statement not covered" >    sendToMysql(valid_types);</span>
+}
+exports.csvParser = csvParser;
+<span class="fstat-no" title="function not covered" >function String(str) {</span>
+<span class="cstat-no" title="statement not covered" >    if (str.match(/[a-zA-Z]/) &amp;&amp; !str.match(/[0-9]/)) {</span>
+<span class="cstat-no" title="statement not covered" >        return str;</span>
+    }
+    else {
+<span class="cstat-no" title="statement not covered" >        return 'Error';</span>
+    }
+}
+exports.isValidString = String;
+<span class="fstat-no" title="function not covered" >function StringToNumber(number) {</span>
+<span class="cstat-no" title="statement not covered" >    if (Number(number) &amp;&amp; number &lt;= 120) {</span>
+<span class="cstat-no" title="statement not covered" >        return number;</span>
+    }
+    else {
+<span class="cstat-no" title="statement not covered" >        return "Age error";</span>
+    }
+}
+exports.isValidNumber = StringToNumber;
+<span class="fstat-no" title="function not covered" >function ValidMail(mail) {</span>
+<span class="cstat-no" title="statement not covered" >    if (mail.match(/[a-zA-Z0-9-_.]{2,}@[a-zA-Z]{2,}[.][a-zA-Z]{2,}/)) {</span>
+<span class="cstat-no" title="statement not covered" >        return mail;</span>
+    }
+    else {
+<span class="cstat-no" title="statement not covered" >        return "Email error";</span>
+    }
+}
+exports.isValidMail = ValidMail;
+<span class="fstat-no" title="function not covered" >function Phone(phone_number) {</span>
+<span class="cstat-no" title="statement not covered" >    if (phone(phone_number)[0]) {</span>
+<span class="cstat-no" title="statement not covered" >        return phone(phone_number)[0];</span>
+    }
+    else {
+<span class="cstat-no" title="statement not covered" >        return "Phone error";</span>
+    }
+}
+exports.isValidPhone = Phone;
+<span class="fstat-no" title="function not covered" >function StringToDate(date) {</span>
+<span class="cstat-no" title="statement not covered" >    if (moment(date, ["MM/DD/YYYY", "MM-DD-YYYY", "MM.DD.YYYY"]).isValid()) {</span>
+<span class="cstat-no" title="statement not covered" >        return moment(date, ["MM/DD/YYYY", "MM-DD-YYYY", "MM.DD.YYYY"]).format("YYYY-MM-DD");</span>
+    }
+    else {
+<span class="cstat-no" title="statement not covered" >        return "Date error";</span>
+    }
+}
+exports.isValidDate = StringToDate;
+<span class="fstat-no" title="function not covered" >function StringToTime(time) {</span>
+<span class="cstat-no" title="statement not covered" >    if (time.indexOf('AM') &gt;= 0 || time.indexOf('PM') &gt;= 0) {</span>
+<span class="cstat-no" title="statement not covered" >        if (moment(time, ["hh:mm a"]).isValid()) {</span>
+<span class="cstat-no" title="statement not covered" >            time = moment(time, ["hh:mm A"]).format("HH:mm:ss");</span>
+<span class="cstat-no" title="statement not covered" >            return time;</span>
+        }
+        else {
+<span class="cstat-no" title="statement not covered" >            return "Time error";</span>
+        }
+    }
+    else {
+<span class="cstat-no" title="statement not covered" >        if (moment(time, ["hh:mm"]).isValid()) {</span>
+<span class="cstat-no" title="statement not covered" >            time = moment(time, ["hh:mm"]).format("HH:mm:ss");</span>
+<span class="cstat-no" title="statement not covered" >            return time;</span>
+        }
+        else {
+<span class="cstat-no" title="statement not covered" >            return "Time error";</span>
+        }
+    }
+}
+exports.isValidTIme = StringToTime;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Nov 05 2018 01:00:54 GMT+0300 (RTZ 2 (зима))
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>
