@@ -1,58 +1,65 @@
 const main = require('./main');
 const assert = require('chai').assert;
+//const mysql = require('mysql');
 
-describe("Testing invalid_types[] and valid_types[]", () => {
-  it('Pars .csv and create invalid_types[] and valid_types[]', () => {
-    main.csvParser([
-      {
-        age: '20',
-        name: '12345Zaic',
-        surname: 'Dmitriev',
-        mail: 'Dima@mail.ru',
-        date: '02-05-2016',
-        phone: '+375293526547',
-        time: '18:50:00'
-      },
-      {
-        age: '15',
-        name: 'Inna',
-        surname: 'Bushilo',
-        mail: 'Inna@mail.ru',
-        date: '04-02-2017',
-        phone: '+375256578410',
-        time: '19:06:00'
-      }]);
-    var invalid_type = [
-      {
-        age: '20',
-        name: 'Error',
-        surname: 'Dmitriev',
-        mail: 'Dima@mail.ru',
-        date: '2016-02-05',
-        phone: '+375293526547',
-        time: '18:50:00'
-      }];
-    var valid_type = [
-      {
-        age: '15',
-        name: 'Inna',
-        surname: 'Bushilo',
-        mail: 'Inna@mail.ru',
-        date: '2017-04-02',
-        phone: '+375256578410',
-        time: '19:06:00'
-      }];
-
-    for (var key in invalid_type[0]){
-      assert.equal(invalid_type[0][key], main.invalid_type[0][key]);
-    }
-
-    for (var key in valid_type[0]){
-      assert.equal(valid_type[0][key], main.valid_type[0][key]);
-    }
-    main.con.end();
-  });
-});
+// const con = mysql.createConnection({
+//   host: "localhost",
+//   user: "root",
+//   password: "savikkirill3",
+//   database: "new_schema"
+// });
+// describe("Testing invalid_types[] and valid_types[]", () => {
+//   it('Pars .csv and create invalid_types[] and valid_types[]', () => {
+//     main.csvParser([
+//       {
+//         age: '20',
+//         name: '12345Zaic',
+//         surname: 'Dmitriev',
+//         mail: 'Dima@mail.ru',
+//         date: '02-05-2016',
+//         phone: '+375293526547',
+//         time: '18:50:00'
+//       },
+//       {
+//         age: '15',
+//         name: 'Inna',
+//         surname: 'Bushilo',
+//         mail: 'Inna@mail.ru',
+//         date: '04-02-2017',
+//         phone: '+375256578410',
+//         time: '19:06:00'
+//       }]);
+//     var invalid = [
+//       {
+//         age: '20',
+//         name: 'Error',
+//         surname: 'Dmitriev',
+//         mail: 'Dima@mail.ru',
+//         date: '2016-02-05',
+//         phone: '+375293526547',
+//         time: '18:50:00'
+//       }];
+//     var valid = [
+//       {
+//         age: '15',
+//         name: 'Inna',
+//         surname: 'Bushilo',
+//         mail: 'Inna@mail.ru',
+//         date: '2017-04-02',
+//         phone: '+375256578410',
+//         time: '19:06:00'
+//       }];
+//
+//     for (var key in invalid[0]){
+//       assert.equal(invalid[0][key], main.invalid_type[0][key]);
+//     }
+//
+//     for (var key in valid[0]){
+//       assert.equal(valid[0][key], main.valid_type[0][key]);
+//     }
+//     con.end();
+//   });
+// });
 
 describe("Testing name and surname", () => {
   it('return string if mask check [a-zA-Z] ', () => {
