@@ -1,33 +1,78 @@
-import csv = require("csvtojson");
-import jsonToCsv = require("json-to-csv");
-import mysql = require("mysql");
-import moment = require("moment");
-import phone = require("phone");
+import * as csv from 'csvtojson';
+import * as jsonToCsv from 'json-to-csv';
+import * as mysql from 'mysql';
+import {config} from './config';
+import {Csv} from './interface';
+import {length, num, validPhone, validDate, newDate,validTime, newTime} from './models';
 
-const invalid_types = [];
-const valid_types = [];
-const con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "savikkirill3",
-  database: "new_schema"
-});
+const invalidTypes: Csv[] = [];
+const validTypes: Csv[] = [];
+const error: any = {};
 
 csv()
-    .fromFile('user.csv')
+    .fromFile('users.csv')
     .then((jsonObj) => {
-      csvParser(jsonObj);
+      validation(jsonObj);
     });
 
-function sendToCsv(invalid_types) {
-  jsonToCsv(invalid_types, 'something.csv')
-      .then(function () {/*success*/
+function validation(jsonObj: Array<Csv>): void {
+
+  jsonObj.forEach((el: Csv) => {
+
+    let validObj: any;
+
+    validObj = config.csv.find(item => item.name === 'Age');
+    error.Age = num(validObj.min, validObj.max)(el.Age);
+
+    validObj = config.csv.find(item => item.name === 'Name');
+    error.Name = length(validObj.minLength, validObj.maxLength)(el.Name)
+        && new RegExp(validObj.regExp).test(el.Name);
+
+    validObj = config.csv.find(item => item.name === 'Surname');
+    error.Surname = length(validObj.minLength, validObj.maxLength)(el.Surname)
+        && new RegExp(validObj.regExp).test(el.Surname);
+
+    validObj = config.csv.find(item => item.name === 'Mail');
+    error.Mail = length(validObj.minLength, validObj.maxLength)(el.Mail)
+        && new RegExp(validObj.regExp).test(el.Mail);
+
+    validObj = config.csv.find(item => item.name === 'Phone');
+    error.Phone = validPhone(validObj.length, validObj.countryCode,
+        validObj.operatorCodes)(el.Phone);
+
+    validObj = config.csv.find(item => item.name === 'DateofReg');
+    error.DateofReg = length(validObj.minLength, validObj.maxLength)(el.DateofReg)
+        && validDate(el.DateofReg);
+
+    validObj = config.csv.find(item => item.name === 'Time');
+    error.Time = length(validObj.minLength, validObj.maxLength)(el.Time)
+        && validTime(el.Time);
+
+
+    if (error.Age && error.Name && error.Surname && error.Mail
+        && error.Phone && error.DateofReg && error.Time) {
+      el.DateofReg = newDate(el.DateofReg);
+      el.Time = newTime(el.Time);
+      validTypes.push(el);
+    } else {
+      invalidTypes.push(el);
+    }
+  });
+  sendToMysql(validTypes);
+  sendToCsv(invalidTypes);
+}
+
+function sendToCsv(invalidTypes: Csv[]):void {
+  jsonToCsv(invalidTypes, 'invalidUsers.csv')
+      .then(function () {console.log('Created invalidUsers.csv')
       })
-      .catch(function (error) {/*handle error*/
+      .catch(function (error:string) {/*handle error*/
       });
 }
 
-function sendToMysql(valid_types) {
+
+
+function sendToMysql(validTypes:Csv[]):void {
   // con.query('CREATE TABLE IF NOT EXISTS SET ? (' +
   //     'cat_id INT  AUTO_INCREMENT PRIMARY KEY,' +
   //     'name VARCHAR(45),' +
@@ -37,102 +82,25 @@ function sendToMysql(valid_types) {
   //     'phone VARCHAR(45),' +
   //     'date DATE,' +
   //     'time TIME);');
-  valid_types.forEach(function (el) {
-    con.query('INSERT INTO data SET ?', el, function (err, result) {
+  const con = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "savikkirill3",
+    database: "new_schema"
+  });
+  con.connect(function(err) {
+    if (err) {
+      console.error('error connecting: ' + err.stack);
+      return;
+    }
+
+    console.log('Сonnected!');
+  });
+  validTypes.forEach(function (el) {
+    con.query('INSERT INTO data SET ?', el, function (err) {
       if (err) throw err;
-      console.log("Record inserted");
+      console.log(`Record inserted`);
     });
   });
   con.end();
 }
-
-function csvParser(results) {
-  results.forEach(function (el) {
-    el.name = String(el.name);
-    el.surname = String(el.surname);
-    el.age = StringToNumber(el.age);
-    el.mail = ValidMail(el.mail);
-    el.phone = Phone(el.phone);
-    el.date = StringToDate(el.date);
-    el.time = StringToTime(el.time);
-
-    if (el.name == "Error" || el.age == "Age error" || el.surname == "Error" || el.date == "Date error" || el.time == "Time error" || el.mail == "Email error" || el.phone == "Phone error") {
-      invalid_types.push(el);
-    } else {
-      valid_types.push(el);
-    }
-  });
-
-  sendToCsv(invalid_types);
-  sendToMysql(valid_types);
-}
-
-function String(str) {
-  if (str.match(/[a-zA-Z]/) && !str.match(/[0-9]/)) {
-    return str;
-  } else {
-    return 'Error'
-  }
-}
-
-function StringToNumber(number) {
-  if (Number(number) && number <= 120) {
-    return number;
-  } else {
-    return "Age error";
-  }
-}
-
-function ValidMail(mail) {
-  if (mail.match(/[a-zA-Z0-9-_.]{2,}@[a-zA-Z]{2,}[.][a-zA-Z]{2,}/)) {
-    return mail;
-  } else {
-    return "Email error";
-  }
-}
-
-function Phone(phone_number) {
-  if (phone(phone_number)[0]) {
-    return phone(phone_number)[0];
-  } else {
-    return "Phone error";
-  }
-}
-
-function StringToDate(date) {
-  if (moment(date, ["MM/DD/YYYY", "MM-DD-YYYY", "MM.DD.YYYY"]).isValid()) {
-    return moment(date, ["MM/DD/YYYY", "MM-DD-YYYY", "MM.DD.YYYY"]).format("YYYY-MM-DD");
-  } else {
-    return "Date error";
-  }
-}
-
-function StringToTime(time) {
-  if (time.indexOf('AM') + 1 || time.indexOf('PM') + 1) {
-    if (moment(time, ["hh:mm a"]).isValid()) {
-      time = moment(time, ["hh:mm A"]).format("HH:mm:ss");
-      return time;
-    } else {
-      return "Time error";
-    }
-  }
-  else {
-    if (moment(time, ["hh:mm"]).isValid()) {
-      time = moment(time, ["hh:mm"]).format("HH:mm:ss");
-      return time;
-    } else {
-      return "Time error";
-    }
-  }
-}
-
-export {String as isValidString};
-export {StringToNumber as isValidNumber};
-export {ValidMail as isValidMail};
-export {Phone as isValidPhone};
-export {StringToDate as isValidDate};
-export {StringToTime as isValidTIme};
-export {csvParser as csvParser};
-export {invalid_types as invalid_type};
-export {valid_types as valid_type};
-export {con as con};

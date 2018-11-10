@@ -1,5 +1,5 @@
-age,name,surname,mail,date,phone,time
-20,Dima555,Dmitriev,Dima@mail.ru,02.05.2016,+375 29 3526547,18:50
+Age,Name,Surname,Mail,DateofReg,Phone,Time
+20,Dima,Dmitriev,Dima@mail.ru,02.05.2016,+375 29 3526547,18:50
 21,Vasya,Petrov,Vasya@mail.ru,03/07/2015,+375 44 2569845,28:50
 $%,Anna,Antonova,Anna@gmail.ru,03/13/2014,+375 44 8541254,10:00 AM
 1f7,Max,Vasiliev,Max@mail.ru,05.07.2008,+375 29 14521445,11:00 AM

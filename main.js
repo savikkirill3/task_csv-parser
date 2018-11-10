@@ -1,135 +1,82 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var csv = require("csvtojson");
-var jsonToCsv = require("json-to-csv");
-var mysql = require("mysql");
-var moment = require("moment");
-var phone = require("phone");
-var invalid_types = [];
-exports.invalid_type = invalid_types;
-var valid_types = [];
-exports.valid_type = valid_types;
-var con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "savikkirill3",
-    database: "new_schema"
-});
-exports.con = con;
+const csv = require("csvtojson");
+const jsonToCsv = require("json-to-csv");
+const mysql = require("mysql");
+const config_1 = require("./config");
+const models_1 = require("./models");
+const invalidTypes = [];
+const validTypes = [];
+const error = {};
 csv()
-    .fromFile('user.csv')
-    .then(function (jsonObj) {
-    csvParser(jsonObj);
+    .fromFile('users.csv')
+    .then((jsonObj) => {
+    validation(jsonObj);
 });
-function sendToCsv(invalid_types) {
-    jsonToCsv(invalid_types, 'something.csv')
+function validation(jsonObj) {
+    jsonObj.forEach((el) => {
+        let validObj;
+        validObj = config_1.config.csv.find(item => item.name === 'Age');
+        error.Age = models_1.num(validObj.min, validObj.max)(el.Age);
+        validObj = config_1.config.csv.find(item => item.name === 'Name');
+        error.Name = models_1.length(validObj.minLength, validObj.maxLength)(el.Name)
+            && new RegExp(validObj.regExp).test(el.Name);
+        validObj = config_1.config.csv.find(item => item.name === 'Surname');
+        error.Surname = models_1.length(validObj.minLength, validObj.maxLength)(el.Surname)
+            && new RegExp(validObj.regExp).test(el.Surname);
+        validObj = config_1.config.csv.find(item => item.name === 'Mail');
+        error.Mail = models_1.length(validObj.minLength, validObj.maxLength)(el.Mail)
+            && new RegExp(validObj.regExp).test(el.Mail);
+        validObj = config_1.config.csv.find(item => item.name === 'Phone');
+        error.Phone = models_1.validPhone(validObj.length, validObj.countryCode, validObj.operatorCodes)(el.Phone);
+        validObj = config_1.config.csv.find(item => item.name === 'DateofReg');
+        error.DateofReg = models_1.length(validObj.minLength, validObj.maxLength)(el.DateofReg)
+            && models_1.validDate(el.DateofReg);
+        validObj = config_1.config.csv.find(item => item.name === 'Time');
+        error.Time = models_1.length(validObj.minLength, validObj.maxLength)(el.Time)
+            && models_1.validTime(el.Time);
+        if (error.Age && error.Name && error.Surname && error.Mail
+            && error.Phone && error.DateofReg && error.Time) {
+            el.DateofReg = models_1.newDate(el.DateofReg);
+            el.Time = models_1.newTime(el.Time);
+            validTypes.push(el);
+        }
+        else {
+            invalidTypes.push(el);
+        }
+    });
+    sendToMysql(validTypes);
+    sendToCsv(invalidTypes);
+}
+function sendToCsv(invalidTypes) {
+    jsonToCsv(invalidTypes, 'invalidUsers.csv')
         .then(function () {
+        console.log('Created invalidUsers.csv');
     })
         .catch(function (error) {
     });
 }
-function sendToMysql(valid_types) {
-    // con.query('CREATE TABLE IF NOT EXISTS SET ? (' +
-    //     'cat_id INT  AUTO_INCREMENT PRIMARY KEY,' +
-    //     'name VARCHAR(45),' +
-    //     'surname VARCHAR(45),' +
-    //     'age INT,' +
-    //     'mail VARCHAR(45),' +
-    //     'phone VARCHAR(45),' +
-    //     'date DATE,' +
-    //     'time TIME);');
-    valid_types.forEach(function (el) {
-        con.query('INSERT INTO data SET ?', el, function (err, result) {
+function sendToMysql(validTypes) {
+    const con = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "savikkirill3",
+        database: "new_schema"
+    });
+    con.connect(function (err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        console.log('Сonnected!');
+    });
+    validTypes.forEach(function (el) {
+        con.query('INSERT INTO data SET ?', el, function (err) {
             if (err)
                 throw err;
-            console.log("Record inserted");
+            console.log(`Record inserted`);
         });
     });
     con.end();
 }
-function csvParser(results) {
-    results.forEach(function (el) {
-        el.name = String(el.name);
-        el.surname = String(el.surname);
-        el.age = StringToNumber(el.age);
-        el.mail = ValidMail(el.mail);
-        el.phone = Phone(el.phone);
-        el.date = StringToDate(el.date);
-        el.time = StringToTime(el.time);
-        if (el.name == "Error" || el.age == "Age error" || el.surname == "Error" || el.date == "Date error" || el.time == "Time error" || el.mail == "Email error" || el.phone == "Phone error") {
-            invalid_types.push(el);
-        }
-        else {
-            valid_types.push(el);
-        }
-    });
-    sendToCsv(invalid_types);
-    sendToMysql(valid_types);
-}
-exports.csvParser = csvParser;
-function String(str) {
-    if (str.match(/[a-zA-Z]/) && !str.match(/[0-9]/)) {
-        return str;
-    }
-    else {
-        return 'Error';
-    }
-}
-exports.isValidString = String;
-function StringToNumber(number) {
-    if (Number(number) && number <= 120) {
-        return number;
-    }
-    else {
-        return "Age error";
-    }
-}
-exports.isValidNumber = StringToNumber;
-function ValidMail(mail) {
-    if (mail.match(/[a-zA-Z0-9-_.]{2,}@[a-zA-Z]{2,}[.][a-zA-Z]{2,}/)) {
-        return mail;
-    }
-    else {
-        return "Email error";
-    }
-}
-exports.isValidMail = ValidMail;
-function Phone(phone_number) {
-    if (phone(phone_number)[0]) {
-        return phone(phone_number)[0];
-    }
-    else {
-        return "Phone error";
-    }
-}
-exports.isValidPhone = Phone;
-function StringToDate(date) {
-    if (moment(date, ["MM/DD/YYYY", "MM-DD-YYYY", "MM.DD.YYYY"]).isValid()) {
-        return moment(date, ["MM/DD/YYYY", "MM-DD-YYYY", "MM.DD.YYYY"]).format("YYYY-MM-DD");
-    }
-    else {
-        return "Date error";
-    }
-}
-exports.isValidDate = StringToDate;
-function StringToTime(time) {
-    if (time.indexOf('AM') + 1 || time.indexOf('PM') + 1) {
-        if (moment(time, ["hh:mm a"]).isValid()) {
-            time = moment(time, ["hh:mm A"]).format("HH:mm:ss");
-            return time;
-        }
-        else {
-            return "Time error";
-        }
-    }
-    else {
-        if (moment(time, ["hh:mm"]).isValid()) {
-            time = moment(time, ["hh:mm"]).format("HH:mm:ss");
-            return time;
-        }
-        else {
-            return "Time error";
-        }
-    }
-}
-exports.isValidTIme = StringToTime;
+//# sourceMappingURL=main.js.map
