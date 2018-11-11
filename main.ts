@@ -22,7 +22,7 @@ function validation(jsonObj: Array<Csv>): void {
     let validObj: any;
 
     validObj = config.csv.find(item => item.name === 'Age');
-    error.Age = num(validObj.min, validObj.max)(el.Age);
+    error.Age = num(validObj.min, validObj.max)(+el.Age);
 
     validObj = config.csv.find(item => item.name === 'Name');
     error.Name = length(validObj.minLength, validObj.maxLength)(el.Name)
@@ -66,7 +66,7 @@ function sendToCsv(invalidTypes: Csv[]):void {
   jsonToCsv(invalidTypes, 'invalidUsers.csv')
       .then(function () {console.log('Created invalidUsers.csv')
       })
-      .catch(function (error:string) {/*handle error*/
+      .catch(function (error:string) {console.log(error)
       });
 }
 

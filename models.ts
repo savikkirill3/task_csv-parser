@@ -7,8 +7,8 @@ export function length(minLength: number, maxLength: number): Function {
 }
 
 export function num(min: string, max: string): Function {
-  return function (str: string): boolean {
-    return +str >= +min && +str <= +max;
+  return function (age: number): boolean {
+    return age >= +min && age <= +max;
   }
 }
 
