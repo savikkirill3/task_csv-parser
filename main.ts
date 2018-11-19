@@ -3,7 +3,7 @@ import * as jsonToCsv from 'json-to-csv';
 import * as mysql from 'mysql';
 import {config} from './config';
 import {Csv} from './interface';
-import {length, num, validPhone, validDate, newDate,validTime, newTime} from './models';
+import {checkLength, checkNum, validPhone, validDate, newDate,validTime, newTime} from './models';
 
 const invalidTypes: Csv[] = [];
 const validTypes: Csv[] = [];
@@ -17,49 +17,53 @@ csv()
 
 function validation(jsonObj: Array<Csv>): void {
 
-  jsonObj.forEach((el: Csv) => {
+  jsonObj.forEach((element: Csv) => {
 
     let validObj: any;
 
-    validObj = config.csv.find(item => item.name === 'Age');
-    error.Age = num(validObj.min, validObj.max)(+el.Age);
+    validObj = checkName('Age');
+    error.Age = checkNum(validObj.min, validObj.max)(+element.Age);
 
-    validObj = config.csv.find(item => item.name === 'Name');
-    error.Name = length(validObj.minLength, validObj.maxLength)(el.Name)
-        && new RegExp(validObj.regExp).test(el.Name);
+    validObj = checkName('Name');
+    error.Name = checkLength(validObj.minLength, validObj.maxLength)(element.Name)
+        && new RegExp(validObj.regExp).test(element.Name);
 
-    validObj = config.csv.find(item => item.name === 'Surname');
-    error.Surname = length(validObj.minLength, validObj.maxLength)(el.Surname)
-        && new RegExp(validObj.regExp).test(el.Surname);
+    validObj = checkName('Surname');
+    error.Surname = checkLength(validObj.minLength, validObj.maxLength)(element.Surname)
+        && new RegExp(validObj.regExp).test(element.Surname);
 
-    validObj = config.csv.find(item => item.name === 'Mail');
-    error.Mail = length(validObj.minLength, validObj.maxLength)(el.Mail)
-        && new RegExp(validObj.regExp).test(el.Mail);
+    validObj = checkName('Mail');
+    error.Mail = checkLength(validObj.minLength, validObj.maxLength)(element.Mail)
+        && new RegExp(validObj.regExp).test(element.Mail);
 
-    validObj = config.csv.find(item => item.name === 'Phone');
+    validObj = checkName('Phone');
     error.Phone = validPhone(validObj.length, validObj.countryCode,
-        validObj.operatorCodes)(el.Phone);
+        validObj.operatorCodes)(element.Phone);
 
-    validObj = config.csv.find(item => item.name === 'DateofReg');
-    error.DateofReg = length(validObj.minLength, validObj.maxLength)(el.DateofReg)
-        && validDate(el.DateofReg);
+    validObj = checkName('DateofReg');
+    error.DateofReg = checkLength(validObj.minLength, validObj.maxLength)(element.DateofReg)
+        && validDate(element.DateofReg);
 
-    validObj = config.csv.find(item => item.name === 'Time');
-    error.Time = length(validObj.minLength, validObj.maxLength)(el.Time)
-        && validTime(el.Time);
+    validObj = checkName('Time');
+    error.Time = checkLength(validObj.minLength, validObj.maxLength)(element.Time)
+        && validTime(element.Time);
 
 
     if (error.Age && error.Name && error.Surname && error.Mail
         && error.Phone && error.DateofReg && error.Time) {
-      el.DateofReg = newDate(el.DateofReg);
-      el.Time = newTime(el.Time);
-      validTypes.push(el);
+      element.DateofReg = newDate(element.DateofReg);
+      element.Time = newTime(element.Time);
+      validTypes.push(element);
     } else {
-      invalidTypes.push(el);
+      invalidTypes.push(element);
     }
   });
   sendToMysql(validTypes);
   sendToCsv(invalidTypes);
+}
+
+function checkName(name: string) {
+  return config.csv.find(item => item.name === name);
 }
 
 function sendToCsv(invalidTypes: Csv[]):void {
@@ -82,13 +86,15 @@ function sendToMysql(validTypes:Csv[]):void {
   //     'phone VARCHAR(45),' +
   //     'date DATE,' +
   //     'time TIME);');
-  const con = mysql.createConnection({
+  const command = 'INSERT INTO data SET ?';
+
+  const connection = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "savikkirill3",
     database: "new_schema"
   });
-  con.connect(function(err) {
+  connection.connect(function(err) {
     if (err) {
       console.error('error connecting: ' + err.stack);
       return;
@@ -97,10 +103,10 @@ function sendToMysql(validTypes:Csv[]):void {
     console.log('Сonnected!');
   });
   validTypes.forEach(function (el) {
-    con.query('INSERT INTO data SET ?', el, function (err) {
+    connection.query(command, el, function (err) {
       if (err) throw err;
       console.log(`Record inserted`);
     });
   });
-  con.end();
+  connection.end();
 }

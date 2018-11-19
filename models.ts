@@ -1,12 +1,12 @@
 import * as moment from 'moment';
 
-export function length(minLength: number, maxLength: number): Function {
+export function checkLength(minLength: number, maxLength: number): Function {
   return function (str: { length: number }): boolean {
     return str.length >= minLength && str.length <= maxLength;
   }
 }
 
-export function num(min: string, max: string): Function {
+export function checkNum(min: string, max: string): Function {
   return function (age: number): boolean {
     return age >= +min && age <= +max;
   }
